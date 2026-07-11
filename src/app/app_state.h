@@ -145,8 +145,6 @@ struct AppState {
   // popup.
   bool welcomeAllowDismissPersist = false;
   bool welcomeDontShowAgain = false; // checkbox state while the modal is open
-  bool licenseOpen = false;
-  bool imprintOpen = false;
 };
 
 } // namespace app

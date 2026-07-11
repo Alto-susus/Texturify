@@ -147,10 +147,9 @@ void drawToolbar(UiContext& ctx) {
     }
   }
   ImGui::SameLine(0, 6 * scale);
-  // Help menu: What's New / License & Terms / Imprint & Privacy — main.js
-  // places these as plain buttons at the bottom of the sidebar; here they're
-  // grouped under one toolbar entry since this shell's right rail has no
-  // footer real estate to spare.
+  // Help menu: What's New — main.js also places License & Terms / Imprint &
+  // Privacy here, but this port drops those entries entirely (see
+  // ui/modals.cpp — the modals themselves were removed too).
   {
     ImGui::SetCursorPosY(y);
     if (ghostButton(th, "?", ImVec2(btnH, btnH))) ImGui::OpenPopup("##helpmenu");
@@ -161,12 +160,6 @@ void drawToolbar(UiContext& ctx) {
         st.welcomeAllowDismissPersist = false; // manual open never suppresses future auto-popups
         st.welcomeDontShowAgain = false;
       }
-      // ctx.i18n->t() returns a temporary std::string; hold it in a local so
-      // the c_str() passed to Selectable() stays valid for the call.
-      std::string licenseLabel = ctx.i18n ? ctx.i18n->t("license.btn") : "License & Terms";
-      if (ImGui::Selectable(licenseLabel.c_str())) st.licenseOpen = true;
-      std::string imprintLabel = ctx.i18n ? ctx.i18n->t("imprint.btn") : "Imprint & Privacy";
-      if (ImGui::Selectable(imprintLabel.c_str())) st.imprintOpen = true;
       ImGui::EndPopup();
     }
   }

@@ -162,76 +162,10 @@ void drawWelcomeModal(UiContext& ctx) {
   endModal();
 }
 
-void drawLicenseModal(UiContext& ctx) {
-  app::AppState& st = *ctx.state;
-  Theme& th = *ctx.theme;
-  app::I18n& i18n = *ctx.i18n;
-  const char* kId = "License##license";
-  if (st.licenseOpen) ImGui::OpenPopup(kId);
-  if (!beginModal(th, kId, &st.licenseOpen, 460, true)) return;
-
-  const bool closedByX = drawCloseX(th);
-  ImGui::PushFont(th.fonts.sansSemi14);
-  ImGui::TextUnformatted(i18n.t("license.title").c_str());
-  ImGui::PopFont();
-  ImGui::Spacing();
-
-  // Display order matches index.html's <li> order, which isn't item1..8
-  // sequential (item3 — the sponsor-links item — is deliberately placed
-  // second-to-last in the original markup).
-  static constexpr int kOrder[] = {1, 2, 4, 5, 6, 7, 3, 8};
-  for (int idx : kOrder)
-    modalBody(th, stripHtml(i18n.t("license.item" + std::to_string(idx))), "-");
-
-  ImGui::Spacing();
-  const bool closeBtn = modalCloseButton(th, "Close");
-  if (closedByX || closeBtn || ImGui::IsKeyPressed(ImGuiKey_Escape)) {
-    st.licenseOpen = false;
-    ImGui::CloseCurrentPopup();
-  }
-  endModal();
-}
-
-void drawImprintModal(UiContext& ctx) {
-  app::AppState& st = *ctx.state;
-  Theme& th = *ctx.theme;
-  app::I18n& i18n = *ctx.i18n;
-  const char* kId = "Imprint##imprint";
-  if (st.imprintOpen) ImGui::OpenPopup(kId);
-  if (!beginModal(th, kId, &st.imprintOpen, 520, true)) return;
-
-  const bool closedByX = drawCloseX(th);
-  ImGui::PushFont(th.fonts.sansSemi14);
-  ImGui::TextUnformatted(i18n.t("imprint.title").c_str());
-  ImGui::PopFont();
-
-  modalHeading(th, i18n.t("imprint.sectionImprint").c_str());
-  modalBody(th, stripHtml(i18n.t("imprint.info")));
-  modalBody(th, stripHtml(i18n.t("imprint.contact")));
-  modalBody(th, stripHtml(i18n.t("imprint.odr")));
-
-  modalHeading(th, i18n.t("imprint.sectionPrivacy").c_str());
-  modalBody(th, stripHtml(i18n.t("imprint.privacyIntro")));
-  for (const char* key : {"imprint.privacyHosting", "imprint.privacyLocal",
-                          "imprint.privacyNoCookies", "imprint.privacyExternal",
-                          "imprint.privacyRights"})
-    modalBody(th, stripHtml(i18n.t(key)), "-");
-
-  ImGui::Spacing();
-  const bool closeBtn = modalCloseButton(th, "Close");
-  if (closedByX || closeBtn || ImGui::IsKeyPressed(ImGuiKey_Escape)) {
-    st.imprintOpen = false;
-    ImGui::CloseCurrentPopup();
-  }
-  endModal();
-}
-
 } // namespace
 
 void drawModals(UiContext& ctx) {
   drawWelcomeModal(ctx);
-  drawLicenseModal(ctx);
-  drawImprintModal(ctx);
 }
 
 } // namespace ui

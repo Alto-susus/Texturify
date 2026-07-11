@@ -204,7 +204,7 @@ int main(int argc, char** argv) {
   const char* testProjectPath = nullptr; // --test-project <path.texturify>: save+reload round-trip
   const char* testLoadPath = nullptr; // --test-load <path.stl|obj|3mf>: load a model at startup, bypassing the file dialog (QA/screenshot use)
   const char* startLang = nullptr; // --lang <code>: force UI language at startup (verification)
-  const char* testModal = nullptr; // --test-modal <welcome|license|imprint>: force that modal open (screenshot verification)
+  const char* testModal = nullptr; // --test-modal welcome: force that modal open (screenshot verification)
   for (int i = 1; i + 1 < argc; i++) {
     if (std::strcmp(argv[i], "--screenshot") == 0) screenshotPath = argv[i + 1];
     if (std::strcmp(argv[i], "--preset") == 0) startPreset = std::atoi(argv[i + 1]);
@@ -910,11 +910,7 @@ int main(int argc, char** argv) {
     state.welcomeOpen = true;
     state.welcomeAllowDismissPersist = true;
   }
-  if (testModal) {
-    if (std::strcmp(testModal, "welcome") == 0) state.welcomeOpen = true;
-    else if (std::strcmp(testModal, "license") == 0) state.licenseOpen = true;
-    else if (std::strcmp(testModal, "imprint") == 0) state.imprintOpen = true;
-  }
+  if (testModal && std::strcmp(testModal, "welcome") == 0) state.welcomeOpen = true;
 
   if (testExportPath || testBake) {
     const app::TextureEntry* e = activeTextureEntry();

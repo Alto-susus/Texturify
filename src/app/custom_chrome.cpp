@@ -59,13 +59,19 @@ LRESULT CALLBACK chromeWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
     case WM_NCHITTEST: {
       LRESULT hit = CallWindowProcW(st->origProc, hwnd, msg, wParam, lParam);
       if (hit == HTCLIENT) {
-        const double x = GET_X_LPARAM(lParam);
-        const double y = GET_Y_LPARAM(lParam);
-        RECT wr;
-        GetWindowRect(hwnd, &wr);
-        const double localY = y - wr.top;
-        if (localY >= 0 && localY < st->captionHeight &&
-            !pointExempt(x, y, st->exemptRects))
+        // WM_NCHITTEST's lParam is always in SCREEN coordinates, but
+        // exemptRects (built from ImGui's GetItemRectMin/Max — the same
+        // space as GLFW's cursor-position callback) are client-area-
+        // relative. Without this conversion the two only happened to line
+        // up when the window sat near the screen origin (e.g. maximized),
+        // which is why every toolbar button stopped responding the moment
+        // the window was moved away from (0,0) — the whole caption band was
+        // being hit-tested against the wrong coordinate space and always
+        // came back HTCAPTION.
+        POINT pt{GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)};
+        ScreenToClient(hwnd, &pt);
+        if (pt.y >= 0 && pt.y < st->captionHeight &&
+            !pointExempt((double)pt.x, (double)pt.y, st->exemptRects))
           return HTCAPTION;
       }
       return hit;

@@ -670,3 +670,30 @@ follow-up task).
   native title bar is genuinely absent (first attempt still showed it — see the WM_NCCALCSIZE bug
   above, only caught because this step wasn't skipped) and that dragging the toolbar's empty space
   moves the window through the real OS drag path (`HTCAPTION`), not a simulated one.
+  **Bug fixed** (user report: "upper panel (new/open/save/etc.) is not working if not in
+  fullscreen", reproducing in both Release and local Debug-style builds): `WM_NCHITTEST`'s `lParam`
+  is always in **screen** coordinates, but `ui::UiContext::dragExemptRects` (built from ImGui's
+  `GetItemRectMin`/`GetItemRectMax`, the same space as GLFW's cursor-position callback) are
+  **client-area-relative**. `custom_chrome.cpp`'s `WM_NCHITTEST` handler was comparing the two
+  directly with no conversion — this happened to work when the window sat near the screen origin
+  (e.g. maximized, or freshly launched near (0,0)), which is why it looked fine in earlier
+  screenshot verification, but broke completely once the window was moved anywhere else on the
+  desktop: every point in the caption-height band tested as "not exempt" (wrong coordinate space),
+  so the *entire* toolbar — not just the empty drag area — resolved to `HTCAPTION`, and clicks on
+  New/Open/Save/Undo/Redo/etc. never reached ImGui at all, instead being swallowed as window-drag
+  clicks. Fixed by converting the screen-space point to client-space via `ScreenToClient(hwnd, &pt)`
+  before the `pointExempt()` check, matching the coordinate space `dragExemptRects` is actually built
+  in. Confirmed via temporary instrumentation (a debug log dumping the converted client point against
+  every exempt rect on each `WM_NCHITTEST`) that a click on the "Open" button now correctly matches
+  its rect and resolves to `HTCLIENT`.
+- **License/Imprint modals removed entirely** (user request): the "?" help-menu popup
+  (`ui/toolbar.cpp`) now only offers "What's New" — the "License & Terms" and "Imprint & Privacy"
+  entries, and `drawLicenseModal`/`drawImprintModal` themselves (`ui/modals.cpp`), were deleted, along
+  with `AppState::licenseOpen`/`imprintOpen` and the `--test-modal license|imprint` debug flags
+  (`--test-modal welcome` still works). **Note**: those modals held the project's actual AGPL-3.0
+  license terms and legal/imprint text — required attribution for a work derived from BumpMesh/
+  CNCKitchen's stlTexturizer (see the top of this file and the welcome modal's `welcome.inspiredBy`
+  text, which still carries a shorter attribution note and was intentionally left in place). Removing
+  the in-app modals doesn't remove the `LICENSE` file or the README's attribution, but if full license
+  text is meant to stay reachable from within the running app for AGPL compliance, that should be
+  re-added in some other form rather than left dropped.
