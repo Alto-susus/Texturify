@@ -1,11 +1,18 @@
-// Port of reference/js/presetTextures.js — the 24 built-in displacement
-// textures (name, image file, default UV scale), full-resolution loading with
-// the 512px longest-side cap, and 80px thumbnails.
+// Port of reference/js/presetTextures.js — the built-in displacement textures
+// (name, image file, default UV scale), full-resolution loading with the
+// 512px longest-side cap, and 80px thumbnails.
+//
+// The first 24 entries are the original IMAGE_PRESETS, same order as
+// presetTextures.js. Entries after that (Metal/Ceramic/Fabric/Stone/Concrete)
+// are native-only additions with no reference-app equivalent — generated
+// procedurally for this port (scripts/gen_new_textures.py), not translated
+// from any original asset, so there's nothing to golden-verify against for
+// those specifically.
 //
 // Deviation: the web app ships precomputed .webp thumbnails; stb_image has no
 // webp decoder, so thumbnails are generated from the full image with the same
 // canvas-style bilinear resize. Thumbnails are display-only — the sampling
-// image (fitted ≤512) is byte-identical to the JS path.
+// image (fitted ≤512) is byte-identical to the JS path for the original 24.
 #pragma once
 
 #include <optional>
@@ -15,7 +22,7 @@
 
 namespace app {
 
-inline constexpr int kPresetTextureCount = 24;
+inline constexpr int kPresetTextureCount = 30;
 inline constexpr int kThumbSize = 80; // presetTextures THUMB
 
 struct TexturePresetDef {
@@ -24,7 +31,8 @@ struct TexturePresetDef {
   double defaultScale;
 };
 
-// Same order as IMAGE_PRESETS in presetTextures.js.
+// Same order as IMAGE_PRESETS in presetTextures.js, plus native-only
+// additions appended after index 23 (see file header).
 extern const TexturePresetDef kTexturePresets[kPresetTextureCount];
 
 // A loaded texture (preset or custom): mirror of the JS entry

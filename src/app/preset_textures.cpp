@@ -29,6 +29,13 @@ const TexturePresetDef kTexturePresets[kPresetTextureCount] = {
     {"Wood 1", "wood.jpg", 0.5},
     {"Wood 2", "woodgrain_02.jpg", 1.0},
     {"Wood 3", "woodgrain_03.jpg", 1.0},
+    // Native-only additions (no reference-app equivalent) — see file header.
+    {"Brushed Metal", "metalBrushed.jpg", 0.3},
+    {"Diamond Plate", "diamondPlate.jpg", 0.5},
+    {"Ceramic Tile", "ceramicTile.png", 1.0},
+    {"Canvas Fabric", "canvasFabric.png", 0.25},
+    {"Flagstone", "flagstone.jpg", 0.5},
+    {"Concrete", "concreteAggregate.jpg", 0.3},
 };
 
 namespace {
