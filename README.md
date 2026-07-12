@@ -5,7 +5,7 @@ in, textured STL / 3MF out). Texturify is inspired by **[BumpMesh](https://bumpm
 ([CNCKitchen/stlTexturizer](https://github.com/CNCKitchen/stlTexturizer)) by Stefan Hermann / CNC
 Kitchen — this is an independent native rewrite, not the original project.
 
-The mesh-processing pipeline (adaptive subdivision → regularization → displacement → QEM decimation → repair), the 24 built-in textures, and all functionality are ported one-to-one from the original web application. The UI is a new dark "liquid glass" design (Dear ImGui + GLFW + OpenGL 3.3).
+The mesh-processing pipeline (adaptive subdivision → regularization → displacement → QEM decimation → repair), the 24 built-in texturesare ported from the original web application. The UI is a new dark "liquid glass" design (Dear ImGui + GLFW + OpenGL 3.3).
 
 ## Building (Windows)
 
@@ -25,6 +25,6 @@ build/Release/texturify.exe
 
 ## License
 
-GNU AGPL v3.0 — see [LICENSE](LICENSE).
+GNU GPL v3.0 — see [LICENSE](LICENSE).
 
-Original work © CNCKitchen (Stefan Hermann). Texturify is derivative work under the same license.
+Original work © CNCKitchen (Stefan Hermann). Texturify is derivative work under GPL license.
