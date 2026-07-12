@@ -171,8 +171,14 @@ void drawToolbar(UiContext& ctx) {
   // drawCloseX. Hand-vectored icons (no font glyph dependency, same
   // rationale as the mesh-diagnostics popup's icons).
   const float winBtnW = 46 * scale;
-  const float winCtrlW = winBtnW * 3;
-  {
+  // Only reserve space for / draw our own minimize/maximize/close cluster
+  // when the custom chrome actually suppressed the native title bar
+  // (Windows only — see app::CustomChrome). On macOS/Linux the OS still
+  // draws its own working title bar above this toolbar; drawing a second,
+  // non-functional set of window controls here (wired to no-op stubs on
+  // those platforms) just produces a confusing double title bar.
+  const float winCtrlW = ctx.customChromeActive ? winBtnW * 3 : 0.0f;
+  if (ctx.customChromeActive) {
     auto winCtrlButton = [&](float xIndexFromRight, ImU32 hoverBg,
                              const std::function<void(ImDrawList*, ImVec2, float)>& drawIcon) {
       ImVec2 bmin(l.toolbarMax.x - winBtnW * (xIndexFromRight + 1), l.toolbarMin.y);

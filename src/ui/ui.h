@@ -121,12 +121,21 @@ struct UiContext {
 
   CylinderSilhouetteView cylinderSilhouette;
 
-  // Custom window chrome: whether the window is currently maximized (picks
-  // the restore- vs. maximize-icon in the toolbar's window-control cluster),
-  // and the screen-space rects of the toolbar's own interactive controls —
+  // Custom window chrome (Windows only — see app::CustomChrome): whether the
+  // native title bar was actually suppressed for this window. false on
+  // macOS/Linux (CustomChrome::install() is a no-op stub there), in which
+  // case drawToolbar() must NOT draw its own minimize/maximize/close cluster
+  // — the OS already provides a real, working one, and ours would just be
+  // three dead buttons wired to no-op stubs stacked confusingly underneath
+  // the native title bar.
+  bool customChromeActive = false;
+  // Whether the window is currently maximized (picks the restore- vs.
+  // maximize-icon in the toolbar's window-control cluster), and the
+  // screen-space rects of the toolbar's own interactive controls —
   // drawToolbar() clears and repopulates this every frame; main.cpp feeds it
   // straight into app::CustomChrome::updateHitTestRegion() right after, so
-  // clicks on real buttons aren't swallowed as a window-drag.
+  // clicks on real buttons aren't swallowed as a window-drag. Both are
+  // meaningless when customChromeActive is false.
   bool windowMaximized = false;
   std::vector<app::ChromeRect> dragExemptRects;
 };

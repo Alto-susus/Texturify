@@ -326,6 +326,7 @@ int main(int argc, char** argv) {
   ctx.theme = &theme;
   ctx.glass = &glass;
   ctx.i18n = &i18n;
+  ctx.customChromeActive = chrome.installed();
 
   // Cylinder-axis silhouette texture (owned here; rebuilt lazily in the main
   // loop whenever cylindrical mode is active and the base mesh topology has
