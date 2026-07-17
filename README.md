@@ -11,7 +11,7 @@ Kitchen — this is an independent native rewrite.
 The mesh-processing pipeline (adaptive subdivision → regularization → displacement → QEM decimation → repair), the 24 built-in texturesare ported from the original web application.
 ___
 Десктопное приложение на C++ для применения текстур со смещением поверхности к 3D-моделям (STL / OBJ / 3MF
-на входе, текстурированный STL / 3MF на выходе). Texturify создан по мотивам ** [BumpMesh](https://bumpmesh.com)**
+на входе, текстурированный STL / 3MF на выходе). Texturify создан по мотивам **[BumpMesh](https://bumpmesh.com)**
 ([CNCKitchen/stlTexturizer](https://github.com/CNCKitchen/stlTexturizer)) автор: Стефан Херманн / CNC
 Kitchen — это независимая авторская версия.
 
